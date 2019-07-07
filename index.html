@@ -3,25 +3,21 @@
 <head>
 <title>Page Title</title>
 
-<script type="text/javascript">
-<!--
-if (screen.width <= 300) {
-document.location = "mobile.html";
-}
-//-->
-</script>
 
+<script type="text/javascript">
+		var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+		
+		if (isMobile) {
+  	          document.location = "mobile.html";		
+		} else {
+			document.location = "index.html";
+		}
+	</script>
 
 </head>
 <body>
 <center>
-<div id="content-desktop">
-DEKSTOP
-</div>
-
-<div id="content-mobile">
-MOBILE
-</div>
+HOME
 </center>
 </body>
 </html>
