@@ -200,7 +200,7 @@
 
             <select name="countryCode" id="area">
                 <option data-countryCode="IN" value="91">IN(+91)</option>
-				<option data-countryCode="AD" value="376">AD(+376)</option>
+		<option data-countryCode="AD" value="376">AD(+376)</option>
                 <option data-countryCode="AO" value="244">AO(+244)</option>
                 <option data-countryCode="AI" value="1264">AI(+1264)</option>
                 <option data-countryCode="AG" value="1268">AG(+1268)</option>
@@ -421,6 +421,68 @@
     <div class="credits">
         Developed with ♥ by <a href="http://suryabhansv.github.io" target="_blank">Suryabhan Singh Vaghela</a>
     </div>
+	<script>
+        window.onload = function () {
+            var pe = document.getElementById('phone');
+            var pa = document.getElementById('area');
+            var fm = document.getElementById('form');
+            var lk = document.getElementById('link');
+            var paste = function (e) {
+                setTimeout(pf);
+            }
+            var pf = function () {
+                pe.value = pe.value.replace(/\D/g, '');
+                var phone = pe.value;
+                var sub = 'https://web.whatsapp.com/send';
+                if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !==
+                        -1)) {
+                    sub = 'whatsapp://send'
+                }
+                lk.setAttribute('href', sub + '?phone=' + pa.value + phone);
+                document.getElementById('send_phone').setAttribute('value', pa.value + phone);
+                fm.setAttribute('action', sub);
+            };
+            var sb = function (e) {
+                pf();
+                if (e.keyCode && e.keyCode === 13) {
+                    fm.submit();
+                }
+                setTimeout(pf);
+            }
+            pe.addEventListener('keyup', sb);
+            pe.addEventListener('keydown', pf);
+            pe.addEventListener('paste', paste);
+            pa.addEventListener('change', pf);
+            fm.addEventListener('submit', function (e) {
+                e.preventDefault();
+            });
+            document.body.addEventListener('touchstart', function () {
+                window.IS_TOUCH = true;
+            })
+
+            var ops = pa.getElementsByTagName('option');
+            var countries = {};
+            for (var x = 0, len = ops.length; x < len; x++) {
+                countries[ops[x].getAttribute('data-countryCode')] = ops[x].getAttribute('value');
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.country && countries.hasOwnProperty(data.country)) {
+                            pa.value = countries[data.country];
+                            pf();
+                        }
+                    } catch (e) {}
+                }
+            }
+            xhr.open('GET', 'https://ipinfo.io/');
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+        }
+
+    </script>
    
 </body>
 
